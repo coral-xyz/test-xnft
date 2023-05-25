@@ -15,8 +15,18 @@ button.addEventListener("click", async () => {
     })
   );
 
-  await window.xnft.solana.sendAndConfirm(transferTransaction);
+  try {
+    const sig = await window.xnft.solana.sendAndConfirm(transferTransaction);
+    button.textContent = "sent, tx: " + sig;
+  } catch (err) {
+    console.error(err);
+    button.textContent = "tx error";
+  }
 
-  button.setAttribute("disabled", "false");
-  button.textContent = originalText;
+  setTimeout(resetButton, 1000);
 });
+
+const resetButton = () => {
+  button.removeAttribute("disabled");
+  button.textContent = originalText;
+};
